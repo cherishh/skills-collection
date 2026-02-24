@@ -15,7 +15,8 @@ info()  { printf "${B}▸${NC} %s\n" "$*"; }
 ok()    { printf "${G}✓${NC} %s\n" "$*"; }
 warn()  { printf "${Y}!${NC} %s\n" "$*"; }
 fail()  { printf "${R}✗${NC} %s\n" "$*"; exit 1; }
-step()  { printf "\n${BOLD}${C}[$1/6]${NC} ${BOLD}%s${NC}\n" "$2"; }
+TOTAL_STEPS=6
+step()  { printf "\n${BOLD}${C}[$1/${TOTAL_STEPS}]${NC} ${BOLD}%s${NC}\n" "$2"; }
 ask()   { printf "${Y}▸${NC} %s" "$1"; read -r "$2" </dev/tty; }
 pause() { printf "${DIM}  按回车继续...${NC}"; read -r </dev/tty; }
 
@@ -23,6 +24,7 @@ SURGE_APP="/Applications/Surge.app"
 SURGE_CLI="$SURGE_APP/Contents/Applications/surge-cli"
 DOWNLOAD_URL="https://dl.nssurge.com/mac/v4/Surge-latest.zip"
 TMP_ZIP="/tmp/Surge-latest.zip"
+trap 'rm -f "$TMP_ZIP"' EXIT
 
 # ============================================================
 printf "\n${BOLD}${C}╔══════════════════════════════════════╗${NC}\n"
@@ -54,6 +56,10 @@ else
   curl -fSL --progress-bar -o "$TMP_ZIP" "$DOWNLOAD_URL" \
     || fail "下载失败，请检查网络连接"
 
+  if [ ! -w /Applications ]; then
+    fail "没有写入 /Applications 的权限，请确认当前账户为管理员账户"
+  fi
+
   info "解压到 /Applications ..."
   unzip -o -q "$TMP_ZIP" -d /Applications/ \
     || fail "解压失败"
@@ -75,8 +81,14 @@ if pgrep -x "Surge" >/dev/null 2>&1; then
   ok "Surge 已在运行"
 else
   info "正在启动 Surge ..."
-  open -a Surge
-  sleep 2
+  open -a Surge || fail "无法启动 Surge，请确认应用完整后重试"
+  for i in $(seq 1 10); do
+    pgrep -x "Surge" >/dev/null 2>&1 && break
+    sleep 1
+  done
+  if ! pgrep -x "Surge" >/dev/null 2>&1; then
+    fail "Surge 启动超时，请手动打开 Surge 后重新运行脚本"
+  fi
   ok "Surge 已启动"
 fi
 
@@ -101,6 +113,21 @@ printf "\n"
 
 pause
 
+# 激活后验证：避免用户未激活就按了回车
+if [ -x "$SURGE_CLI" ]; then
+  ACTIVATE_CHECK=$("$SURGE_CLI" dump profile effective 2>/dev/null | head -3 || true)
+  while [ -z "$ACTIVATE_CHECK" ]; do
+    warn "未检测到企业配置，可能尚未完成激活"
+    printf "\n"
+    printf "  ${Y}请先在 Surge 窗口中完成企业授权激活，再按回车继续。${NC}\n"
+    printf "  ${DIM}如需帮助，请参照上方步骤填写激活信息。${NC}\n"
+    printf "\n"
+    pause
+    ACTIVATE_CHECK=$("$SURGE_CLI" dump profile effective 2>/dev/null | head -3 || true)
+  done
+  ok "企业配置已检测到"
+fi
+
 # ============================================================
 step 5 "验证配置"
 # ============================================================
@@ -117,7 +144,7 @@ fi
 
 # 用 surge-cli 检查配置
 if [ -x "$SURGE_CLI" ]; then
-  PROFILE_OUT=$("$SURGE_CLI" dump profile effective 2>/dev/null | head -5 || true)
+  PROFILE_OUT=$("$SURGE_CLI" dump profile effective 2>/dev/null | head -10 || true)
   if [ -n "$PROFILE_OUT" ]; then
     ok "配置文件已加载"
   else
@@ -145,7 +172,7 @@ info "正在测试 Google 连通性..."
 
 HTTP_CODE=$(curl -s --max-time 10 -o /dev/null -w "%{http_code}" https://www.google.com 2>/dev/null || echo "000")
 
-if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "301" ] || [ "$HTTP_CODE" = "302" ]; then
+if [[ "$HTTP_CODE" =~ ^[23][0-9][0-9]$ ]]; then
   ok "Google 连通性测试通过 (HTTP $HTTP_CODE)"
 else
   warn "Google 连通性测试失败 (HTTP $HTTP_CODE)"
