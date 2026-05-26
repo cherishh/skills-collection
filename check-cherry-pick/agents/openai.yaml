@@ -1,0 +1,4 @@
+interface:
+  display_name: "Check Cherry Pick"
+  short_description: "Check release commits missing from main"
+  default_prompt: "Use $check-cherry-pick to compare the latest release branch with main and list commits still missing from main."
