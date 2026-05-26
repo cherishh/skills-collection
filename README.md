@@ -16,6 +16,7 @@ A collection of Claude Code skills shared as standalone repositories.
 These skills are hosted in other repositories and are not maintained here.
 
 - **[chrome-cdp-skill](https://github.com/pasky/chrome-cdp-skill)** - Interact with a local Chrome browser session via Chrome DevTools Protocol.
+- **[douban-sync-skill](https://github.com/cosformula/douban-sync-skill)** - Skill repository for syncing Douban data.
 - **[frontend-design](https://github.com/anthropics/skills/blob/main/skills/frontend-design/SKILL.md)** - Frontend design guidance skill from Anthropic's skills repository.
 - **[frontend-slides](https://github.com/zarazhangrui/frontend-slides)** - Skill repository for creating frontend slides.
 - **[youtube-transcript](https://github.com/badlogic/pi-skills/blob/main/youtube-transcript/SKILL.md)** - Skill for working with YouTube transcripts.
