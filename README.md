@@ -1,6 +1,6 @@
 # Skills Collection
 
-A collection of Claude Code skills shared as standalone repositories.
+A collection of Skills I personally use.
 
 ## Skills
 
