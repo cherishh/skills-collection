@@ -1,4 +1,4 @@
-# VPS Shadowsocks 部署 Skill（通用 VPS 公共版）
+# VPS Shadowsocks 部署 Skill
 
 ## 概述
 
