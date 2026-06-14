@@ -19,6 +19,7 @@ These skills are hosted in other repositories and are not maintained here.
 - **[douban-sync-skill](https://github.com/cosformula/douban-sync-skill)** - Skill repository for syncing Douban data.
 - **[frontend-design](https://github.com/anthropics/skills/blob/main/skills/frontend-design/SKILL.md)** - Frontend design guidance skill from Anthropic's skills repository.
 - **[frontend-slides](https://github.com/zarazhangrui/frontend-slides)** - Skill repository for creating frontend slides.
+- **[ponytail](https://github.com/DietrichGebert/ponytail)** - Minimal-solution coding mode for avoiding over-engineering.
 - **[youtube-transcript](https://github.com/badlogic/pi-skills/blob/main/youtube-transcript/SKILL.md)** - Skill for working with YouTube transcripts.
 
 ## Note
