@@ -1,0 +1,4 @@
+interface:
+  display_name: "AI 工具报销"
+  short_description: "从 invoice、付款截图和央行汇率生成并填写飞书报销"
+  default_prompt: "使用 $fill-ai-tool-reimbursement 处理这个文件夹中的 AI 工具订阅报销，自行打开飞书和央行官方页面并保存草稿。"
