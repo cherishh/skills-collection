@@ -1,11 +1,11 @@
 ---
 name: cp
-description: Commit and push all current changes; on release-* branches, optionally cherry-pick the new commit to main and automatically resolve conflicts when safe.
+description: Manual-only commit and push workflow. Use only when the user explicitly invokes the literal `/cp` command. Never use for natural-language requests such as "commit", "push", "commit and push", "提交", "推送", or similar wording.
 ---
 
 # CP
 
-Use this skill when the user asks to run `cp`, commit and push all current changes, or perform the commit-push workflow with optional release-to-main cherry-pick.
+Use this skill only when the user explicitly invokes `/cp`. Do not load or apply it for natural-language Git requests, even when the requested operation is identical; handle those requests with the ordinary Git workflow instead.
 
 ## Workflow
 
