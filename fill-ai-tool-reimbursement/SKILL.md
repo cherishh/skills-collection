@@ -20,7 +20,7 @@ Never bypass a stricter rule from a companion skill or the user's current instru
 ## Preserve These Invariants
 
 - Use only the China PBOC Monetary Policy Department central parity announcement index at `https://www.pbc.gov.cn/zhengcehuobisi/125207/125217/125925/index.html`, or a stricter official PBOC page supplied by the user. Do not substitute search results, commercial sites, card-network rates, or other exchange-rate sources.
-- Use the latest official announcement strictly before the payment date unless the folder's requirements explicitly define another rule.
+- Use the official announcement dated on the payment date when one exists. Only when the PBOC publishes no announcement that day, use the most recent earlier announcement, unless the folder's requirements explicitly define another rule.
 - Record the announcement date, rate, and official article URL for every converted expense.
 - Upload each original invoice and payment record directly as separate Feishu attachments. Do not merge, convert, re-encode, or upload temporary renders.
 - Include a payment-only expense only when the user explicitly allows the missing invoice.
@@ -80,10 +80,10 @@ Use the payment date, not the invoice issue date or merchant settlement date, fo
 For each foreign-currency payment:
 
 1. Work only from the approved PBOC Monetary Policy Department page established in step 0.
-2. Find the most recent central parity announcement dated before the payment date.
-3. For weekends and holidays, move backward to the most recent published announcement.
+2. Check the payment date itself first. When a daily announcement exists for that date, use it.
+3. Only when no announcement exists on the payment date, such as some weekends or holidays, move backward to the most recent published announcement.
 4. Read the rate from the official daily article and capture its URL.
-5. Recheck that `rate_date < payment_date` before calculation.
+5. Recheck that `rate_date <= payment_date` and that no later announcement on or before the payment date was skipped.
 
 If the official page is unavailable or the currency is not covered, stop and ask the user. Do not improvise a rate.
 
@@ -112,7 +112,7 @@ Confirm all of the following before filling Feishu:
 - Every included attachment exists and appears exactly once.
 - The attachment count does not exceed the current form limit.
 - Every converted expense has an official PBOC URL, rate date, and rate.
-- Every rate date is strictly before its payment date.
+- Every rate date is on or before its payment date; when the payment date has an announcement, the dates must be equal.
 - Per-item amounts, subtotals, and the grand total match the audit file.
 - Excluded items and generated/temporary files are absent from the upload set.
 

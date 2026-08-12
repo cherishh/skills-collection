@@ -51,7 +51,7 @@ The calculator:
 - Includes only entries where `included` is not `false`.
 - Uses `Decimal(foreign_amount) * Decimal(cny_per_unit)`.
 - Rounds each entry to two decimals with `ROUND_HALF_UP`.
-- Requires `rate_date < payment_date` for non-CNY entries.
+- Requires `rate_date <= payment_date` for non-CNY entries. Use the payment-date announcement when it exists; otherwise use the most recent earlier announcement.
 - Checks that invoice/payment files exist when `--root` is supplied.
 - Rejects duplicate attachment references.
 - Rejects an attachment count above `--attachment-limit`.

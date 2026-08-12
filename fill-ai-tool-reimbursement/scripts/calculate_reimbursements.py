@@ -118,9 +118,9 @@ def analyze(
                 entry.get("cny_per_unit"), "cny_per_unit", row_number, errors
             )
             rate_date = date_value(entry.get("rate_date"), "rate_date", row_number, errors)
-            if payment_date and rate_date and rate_date >= payment_date:
+            if payment_date and rate_date and rate_date > payment_date:
                 errors.append(
-                    f"entry {row_number}: rate_date {rate_date} must be before payment_date {payment_date}"
+                    f"entry {row_number}: rate_date {rate_date} must be on or before payment_date {payment_date}"
                 )
             if not rate_url.startswith(PBOC_PREFIX):
                 errors.append(
@@ -186,7 +186,7 @@ def render_markdown(
     lines = [
         f"# {markdown_text(title)}",
         "",
-        "换算规则：使用付款日前最近一期中国人民银行货币政策司公布的人民币汇率中间价；每笔结果按四舍五入保留两位小数。",
+        "换算规则：付款日当日有中国人民银行货币政策司人民币汇率中间价公告时使用当日汇率；当日无公告时使用此前最近一期公告。每笔结果按四舍五入保留两位小数。",
         "",
         "| 项目 | 付款日 | 外币金额 | 汇率公告日 | 汇率 | 人民币 |",
         "|---|---:|---:|---:|---:|---:|",
