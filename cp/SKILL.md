@@ -22,6 +22,19 @@ Use this skill only when the user explicitly invokes `/cp`. Do not load or apply
    - When the diff mixes unrelated or loosely related areas but the user asked to commit all current changes, make the commit body explicitly enumerate the notable areas instead of hiding them behind a broad subject.
 4. Capture the new commit SHA with `git rev-parse HEAD`.
 5. Push the current branch with `git push origin <current-branch>`.
+   - If the push succeeds, continue with the branch-specific steps below.
+   - If the push is rejected only because the remote branch advanced (`fetch first` or non-fast-forward):
+     - Confirm the current branch is unchanged and the working tree is clean.
+     - Run `git pull --rebase origin <current-branch>`.
+     - If conflicts occur, resolve them automatically:
+       - Inspect the conflicting files, both sides of the conflict, nearby code, and relevant history to understand each side's intent.
+       - Preserve both compatible intents instead of choosing one side wholesale.
+       - Remove all conflict markers, run focused checks appropriate to the affected files, stage the resolution, and continue the rebase with `git rebase --continue`.
+       - Do not ask the user to resolve ordinary conflicts or approve the resolution.
+       - Stop and report a blocker only when the intents are genuinely incompatible or a safe resolution requires a product decision that cannot be inferred from repository evidence. Leave the rebase state intact; do not abort it.
+     - Capture the rewritten commit SHA again with `git rev-parse HEAD`.
+     - Push the current branch once more with `git push origin <current-branch>`.
+   - If the initial push fails for any other reason, or the retry fails, stop and report the failure.
 6. If the current branch name matches `release-*`, ask the user exactly:
 
    `当前在 release 分支，是否要 cherry-pick 这个 commit 到 main？`
@@ -45,6 +58,6 @@ Use this skill only when the user explicitly invokes `/cp`. Do not load or apply
 
 - Do not run destructive git commands such as `git reset --hard` or `git checkout --` unless the user explicitly asks.
 - If there are no staged or unstaged changes, do not create an empty commit unless the user explicitly asks.
-- If commit, push, or pull fails, stop and report the failure with the current branch and relevant git status.
+- If commit or pull fails, stop and report the failure with the current branch and relevant git status. The only automatic push-failure recovery is the single remote-divergence rebase-and-retry path defined above.
 - Treat cherry-pick conflicts as part of the normal workflow: resolve, validate, stage, and continue automatically. Do not abort the cherry-pick or ask the user merely because conflicts exist.
 - If a cherry-pick conflict cannot be resolved safely from repository evidence, remain on `main` with the conflict state intact and report the exact blocker; do not guess, abort, or switch branches.
