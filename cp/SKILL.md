@@ -1,6 +1,6 @@
 ---
 name: cp
-description: Manual-only commit and push workflow. Use only when the user explicitly invokes the literal `/cp` command. Never use for natural-language requests such as "commit", "push", "commit and push", "提交", "推送", or similar wording.
+description: Manual-only commit and push workflow that automatically cherry-picks release-branch commits to `main` unless the user explicitly opts out. Use only when the user explicitly invokes the literal `/cp` command. Never use for natural-language requests such as "commit", "push", "commit and push", "提交", "推送", or similar wording.
 ---
 
 # CP
@@ -35,11 +35,7 @@ Use this skill only when the user explicitly invokes `/cp`. Do not load or apply
      - Capture the rewritten commit SHA again with `git rev-parse HEAD`.
      - Push the current branch once more with `git push origin <current-branch>`.
    - If the initial push fails for any other reason, or the retry fails, stop and report the failure.
-6. If the current branch name matches `release-*`, ask the user exactly:
-
-   `当前在 release 分支，是否要 cherry-pick 这个 commit 到 main？`
-
-7. If the user agrees:
+6. If the current branch name matches `release-*` and the user has not explicitly opted out of syncing to `main`, continue automatically without asking for confirmation:
    - Switch to `main`.
    - Pull the latest `main`.
    - Cherry-pick the captured commit SHA.
@@ -51,8 +47,8 @@ Use this skill only when the user explicitly invokes `/cp`. Do not load or apply
      - Stop and report a blocker only when the intents are genuinely incompatible or a safe resolution requires a product decision that cannot be inferred from repository evidence.
    - Push `main`.
    - Switch back to the original release branch.
-8. If the user refuses, stop after the release branch push.
-9. If the current branch is `main`, starts with `feat/`, starts with `fix/`, or is any other non-`release-*` branch, do not ask the cherry-pick question and stop after pushing.
+7. If the user explicitly opts out of syncing to `main` in the `/cp` invocation or before the cherry-pick begins, stop after the release branch push. Do not switch branches or modify `main`.
+8. If the current branch is `main`, starts with `feat/`, starts with `fix/`, or is any other non-`release-*` branch, stop after pushing.
 
 ## Guardrails
 
