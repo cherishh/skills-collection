@@ -23,10 +23,12 @@ Never bypass a stricter rule from a companion skill or the user's current instru
 - Use the official announcement dated on the payment date when one exists. Only when the PBOC publishes no announcement that day, use the most recent earlier announcement, unless the folder's requirements explicitly define another rule.
 - Record the announcement date, rate, and official article URL for every converted expense.
 - Upload each original invoice and payment record directly as separate Feishu attachments. Do not merge, convert, re-encode, or upload temporary renders.
+- User preference: every reimbursement must also include the original email ownership screenshot (`email-ownership-proof.jpg`) once per application, without asking again. Look in the reimbursement folder and its parent, then `/Users/zhongxi/Desktop/报销/email-ownership-proof.jpg`; inspect it before upload. If it is missing, ask for its location rather than silently omitting it. Upload it to the form's general attachment field, or to one relevant expense detail when attachments are only available per detail.
 - Include a payment-only expense only when the user explicitly allows the missing invoice.
 - Never silently omit an expense or attachment. If the form limit is exceeded, report the exact count and ask which item to exclude.
 - Preserve explicit exclusions, such as an item the user tells you to remove.
 - Respect instructions to leave the receiving account blank or let the user complete it.
+- User preference: default `是否需要其他 Leader 审批` to `否` (not needed), without asking again. Override this default only when the user explicitly requests additional Leader approval for the current reimbursement.
 - Save a draft after verification. Never submit the approval without a fresh, explicit confirmation from the user.
 
 ## Workflow
@@ -99,7 +101,7 @@ python3 <skill-directory>/scripts/calculate_reimbursements.py \
   --attachment-limit <limit-shown-by-feishu>
 ```
 
-The script uses decimal arithmetic and `ROUND_HALF_UP`, validates payment/rate dates, checks referenced files and duplicate attachments, enforces the supplied attachment limit, and writes the audit table.
+The script uses decimal arithmetic and `ROUND_HALF_UP`, validates payment/rate dates, checks referenced files and duplicate attachments, enforces the supplied attachment limit, and writes the audit table. Its attachment count covers invoices and payment records only: add the email ownership screenshot to the audit file's attachment reconciliation and final total, and check the complete set against the form limit.
 
 Review the generated file before entering the form. Do not upload `汇率换算明细.md` unless the user explicitly requests it; it is an audit artifact, not invoice evidence.
 
@@ -110,6 +112,7 @@ Confirm all of the following before filling Feishu:
 - Every included expense has a payment record.
 - Every included expense has an invoice unless `allow_payment_only: true` is explicitly authorized.
 - Every included attachment exists and appears exactly once.
+- The expected attachment set includes the inspected email ownership screenshot once per application.
 - The attachment count does not exceed the current form limit.
 - Every converted expense has an official PBOC URL, rate date, and rate.
 - Every rate date is on or before its payment date; when the payment date has an announcement, the dates must be equal.
@@ -150,7 +153,7 @@ Save the draft. Do not press Submit.
 Report concisely:
 
 - Included item count and grand total.
-- Attachment count split by invoices and payment records.
+- Attachment count split by invoices, payment records, and the email ownership screenshot.
 - Explicitly excluded or payment-only items.
 - Fields intentionally left for the user.
 - Draft saved/not submitted status.
