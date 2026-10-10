@@ -28,6 +28,7 @@ Never bypass a stricter rule from a companion skill or the user's current instru
 - Never silently omit an expense or attachment. If the form limit is exceeded, report the exact count and ask which item to exclude.
 - Preserve explicit exclusions, such as an item the user tells you to remove.
 - Respect instructions to leave the receiving account blank or let the user complete it.
+- User preference: set `报销付款公司` to `上海即果信息技术有限公司` for this user's reimbursements. This explicit preference takes precedence over an older company named in the folder's requirements (such as `上海星汉`); use another company only when the user explicitly requests it for the current reimbursement.
 - User preference: default `是否需要其他 Leader 审批` to `否` (not needed), without asking again. Override this default only when the user explicitly requests additional Leader approval for the current reimbursement.
 - Save a draft after verification. Never submit the approval without a fresh, explicit confirmation from the user.
 
@@ -125,7 +126,7 @@ Stop on a preflight failure. Resolve it with the user rather than weakening the 
 
 Use current Computer Use state before every action; do not reuse stale accessibility indices after the form changes.
 
-1. Fill reimbursement type, reason, payer company, and other required header fields from the form or requirements.
+1. Fill reimbursement type, reason, and other required header fields from the form or requirements. Set the payer company according to the user preference above: `上海即果信息技术有限公司`.
 2. Add one detail per included manifest entry.
 3. Fill amount in CNY, detail text, and payment date exactly as audited.
 4. Re-query after adding or copying a detail because indices and scroll positions can shift.
