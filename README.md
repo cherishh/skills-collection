@@ -10,7 +10,6 @@ A collection of Skills I personally use.
 - **cp** - Commit all current changes, push the current branch, and for `release-*` branches ask whether to cherry-pick the new commit back to `main`.
 - **fill-ai-tool-reimbursement** - Reconcile AI-tool invoices and payment records, apply official PBOC rates, and prepare a verified Feishu reimbursement draft.
 - **install-wusong-input-method** - Install and configure the Rime Ice (雾凇拼音) input method on a new macOS machine with Squirrel.app.
-- **vps-ss-setup** - Deploy Shadowsocks proxy service on Ubuntu/Debian VPS hosts and enable BBR+CAKE network acceleration.
 
 ### External skills
 
@@ -20,7 +19,9 @@ These skills are hosted in other repositories and are not maintained here.
 - **[douban-sync-skill](https://github.com/cosformula/douban-sync-skill)** - Skill repository for syncing Douban data.
 - **[frontend-design](https://github.com/anthropics/skills/blob/main/skills/frontend-design/SKILL.md)** - Frontend design guidance skill from Anthropic's skills repository.
 - **[frontend-slides](https://github.com/zarazhangrui/frontend-slides)** - Skill repository for creating frontend slides.
+- **[modern-web-guidance](https://github.com/GoogleChrome/modern-web-guidance)** - Keep your coding agent up to date with the latest web best practices.
 - **[ponytail](https://github.com/DietrichGebert/ponytail)** - Minimal-solution coding mode for avoiding over-engineering.
+- **[pstack](https://github.com/backnotprop/pstack)** - Skills and principles for rigorous AI-assisted engineering.
 - **[youtube-transcript](https://github.com/badlogic/pi-skills/blob/main/youtube-transcript/SKILL.md)** - Skill for working with YouTube transcripts.
 
 ## Note
